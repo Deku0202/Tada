@@ -19,6 +19,8 @@ def token(query, proxy):
         
         data = response.json()
         
+        return data["accessToken"]
+        
         #print the total coin
         mainfuns.log(f"{mainfuns.green}Successfully access Token")
         

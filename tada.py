@@ -65,9 +65,6 @@ class Hamster:
             #information
             token = login.token(data, proxies)
             
-            #choose option to do
-            mainfuns.log(f"{mainfuns.green}Buy all Skins: {mainfuns.white}1")
-            mainfuns.log(f"{mainfuns.green}Complete Tasks: {mainfuns.white}2")
 
             #choose
             print(f"{green}Choose: {reset}", end='')
