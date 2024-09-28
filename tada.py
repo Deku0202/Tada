@@ -14,7 +14,7 @@ import time
 
 from functions import mainfuns
 from functions import login
-# from functions import task
+from functions import task
 
 
 
@@ -65,19 +65,20 @@ class Hamster:
             #information
             token = login.token(data, proxies)
             
-
-            #choose
-            print(f"{green}Choose: {reset}", end='')
-            option = int(input())
+            #check total tasks
+            total_tasks = task.task_list(token, proxies)
             
-            #if statement for choosing option
-            if option == 1:
-                total_skin = 39
-    
-                #loop the buying skin
-                for i in range(total_skin):
-                                
-                    skin_buy.skin(data, proxies, i)
+            # task.check_task(token, proxies, "4d3a2841-d8fb-4cc8-98c2-9ebf1a70fe3b")
+            task.check_task(token, proxies,"open_bitget_exchange", "428ade22-16ca-4c05-9ba3-9a2e0e19438e")
+            
+            #finish the tasks
+            for i in total_tasks:
+                if i['name'] == "Check in once a day.":
+                    task.finish_task(token, proxies, i['id'])
+                elif 'Invite' not in i['name']:
+                    task.check_task(token, proxies,i['activityTypes'][0], i['id'])
+            
+
             
             #check total task
             if option == 2:
