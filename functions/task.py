@@ -35,14 +35,22 @@ def task_list(data, proxy):
             timeout=20,
         )
         data = response.json()
+        
+        try:
+            if data['message'] == 'Expired jwt token!':
+                #expired token
+                mainfuns.log(f"{mainfuns.red}Token Expired!")
+                return None
+            
+        except:
+            return data
 
-        return data
         
     except:
         mainfuns.log(f"{mainfuns.red}Error connect to owner")
         return None
     
-def finish_task(data, proxy, taskid):
+def finish_task(data, proxy, taskid, name):
     url =f'https://backend.clutchwalletserver.xyz/activity/v2/missions/{taskid}/claim'
     
     try:
@@ -55,14 +63,20 @@ def finish_task(data, proxy, taskid):
         
         result = response.json()
         
-        return result
+        length = len(result['missionPointTransactions'])
+        
+        if len(result['missionPointTransactions']) == 1:
+            mainfuns.log(f"{mainfuns.white}{name}: {mainfuns.green}Completed")
+            mainfuns.delay(5)
+        
+        return 
 
     except:
         mainfuns.log(f"{mainfuns.red}Error connect to owner")
         return None
     
 #check the task
-def check_task(data, proxy, taskname, taskid):
+def check_task(data, proxy, taskname, taskid, name):
     url =f'https://backend.clutchwalletserver.xyz/activity/v3/activities/{taskname}'
     
     try:
@@ -76,12 +90,9 @@ def check_task(data, proxy, taskname, taskid):
         result = response.json()
         
         if result['status'] =='ok':
-            finish_task(data,proxy,taskid)
-                
-        
-        if result['task']['isCompleted'] == True:
-            mainfuns.log(f"{mainfuns.white}{TaskName}: {mainfuns.green}Completed")
-        return result
+            finish_task(data,proxy,taskid, name)
+            
+        return 
     
         
     except:

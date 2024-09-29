@@ -63,22 +63,31 @@ class Hamster:
             proxies = mainfuns.format_proxy(proxy)
             
             #information
-            token = login.token(data, proxies)
+            # token = login.token(data, proxies)
+            
+            token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYzViZmQyZS1jYjEyLTRhMjMtYjUyYy1jMDBkMzk5YWJhOGMiLCJ0eXBlIjoiVEVMRUdSQU1fTUlOSUFQUCIsInVzZXJJZCI6IjU0MjEwNGM5LTEyN2UtNDUyYy04Y2NkLTExN2Y2M2YxYzIyMiIsInNpZCI6ImNiMzhmMjIxLTA5ZGItNGQ4My04NjI1LTdmYTVlMjAwN2FkZSIsIm5vbmNlIjoiak85S0ozU0YwYyIsImlhdCI6MTcyNzQ5MjkyMywiZXhwIjoxNzI3NTM2MTIzfQ.INWlnjtxP0OdvcWte9POVOgSFQozfO1w5PNiNlNr7hkn-Z0imB78N1G6a1ZqFn_ixFgnMtHje3Z56jfICXiv723BD3bH6XiFXuByok1_gaiatB-XVhpWygrEeKfN85OfoT9Iv-bhjkoUSTWK_91rf5px9g59wAp7j8jCBD-9IRVG97ETu6UXJaa25UyKtIiriZBW4BK9DIBTz07d9kWdsSpx8ttd9mTIzYIcJlWznDiCEjS_znPq3qSKQiBg8hoArqzZZIj6v85gXTDGT9LmxjpXPfxImvZuyuSSsAk0hQXm4ufplyam-UCbUSYIHv4vkYiikE7fu7picde5PtbPaCe3YoA543v1CYGnSGq5cdIaEYbpAhfT8OfBCzLahEh_qGJU4QCCzmZXUVUzyiTN_bhpxVRwUk7SBXWE2Qg2M0wjT8-02t8iChV5hHWL3g4GAemRagVtGAnplen2lO1yACpL7rnMkHXrfkSeaQLrON1hfa1NE39Te2no6Ir_q8wk1ESY27W2Q0Hjymn2NGO02UctN-ESdRUMq3BgMpGt2oqiVanEpCpQNRHiuvtW63FaKDODMtpBTJ2YUi1l06ahlxhoO4itDY8FUD6Vg_eNKvgJwfwIbQ49H2EaKHNmI3tIZUhE1VzMYf6IzAcHJ6ffAR9PZzmuGwiQlBcwRykvRL8'
             
             #check total tasks
             total_tasks = task.task_list(token, proxies)
             
+            if total_tasks == None:
+                break
+            
             # task.check_task(token, proxies, "4d3a2841-d8fb-4cc8-98c2-9ebf1a70fe3b")
-            task.check_task(token, proxies,"open_bitget_exchange", "428ade22-16ca-4c05-9ba3-9a2e0e19438e")
+            # task.check_task(token, proxies,"open_gate_buy_mvl", "b32239cd-05d0-4d9e-accd-32865fdb4095","Buy $MVL in Gate.io")
             
             #finish the tasks
             for i in total_tasks:
-                if i['name'] == "Check in once a day.":
-                    task.finish_task(token, proxies, i['id'])
-                elif 'Invite' not in i['name']:
-                    task.check_task(token, proxies,i['activityTypes'][0], i['id'])
+                
+                if i['slug'] == "miniapp_telegram_channel_follow":
+                    break
+                
+                if i['maxAccomplishCountPerUser'] is None or i['userAccomplishedCount'] < i['maxAccomplishCountPerUser']:
+                    if i['activityTypes'] is None and 'Invite' not in i['name']:
+                        task.finish_task(token, proxies, i['id'], i['name'])
+                    elif 'Invite' not in i['name']:
+                        task.check_task(token, proxies,i['activityTypes'][0], i['id'], i['name'])
             
-
             
             #check total task
             if option == 2:
