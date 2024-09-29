@@ -15,6 +15,7 @@ import time
 from functions import mainfuns
 from functions import login
 from functions import task
+from functions import token_add
 
 
 
@@ -44,6 +45,28 @@ class Hamster:
         total_acc = len(accounts)
         
         
+        #choose option to do
+        mainfuns.log(f"{mainfuns.green}Add Data: {mainfuns.white}1")
+        mainfuns.log(f"{mainfuns.green}Complete Tasks: {mainfuns.white}2")
+
+        #choose
+        print(f"{green}Choose: {reset}", end='')
+        option = int(input())
+        
+        #if statement for choosing option
+        if option == 1:
+                
+            while True:
+                #choose
+                print(f"{green}Add Query ID: {reset}", end='')
+                query = input()
+                    
+                #information
+                token = login.token(data, proxies)
+                    
+                token_add.token_add(token)
+        
+        
         #print the total account
         mainfuns.log(f"{green}Total Account: {white}{total_acc}")
         
@@ -62,26 +85,32 @@ class Hamster:
             #proxy with http and https format
             proxies = mainfuns.format_proxy(proxy)
             
-            #information
-            token = login.token(data, proxies)
             
-            #check total tasks
-            total_tasks = task.task_list(token, proxies)
             
-            if total_tasks == None:
-                break
             
-            #finish the tasks
-            for i in total_tasks:
                 
-                if i['slug'] == "miniapp_telegram_channel_follow":
+                
+                
+                
+            
+            if option == 2:
+                #check total tasks
+                total_tasks = task.task_list(token, proxies)
+                
+                if total_tasks == None:
                     break
                 
-                if i['maxAccomplishCountPerUser'] is None or i['userAccomplishedCount'] < i['maxAccomplishCountPerUser']:
-                    if i['activityTypes'] is None and 'Invite' not in i['name']:
-                        task.finish_task(token, proxies, i['id'], i['name'])
-                    elif 'Invite' not in i['name']:
-                        task.check_task(token, proxies,i['activityTypes'][0], i['id'], i['name'])
+                #finish the tasks
+                for i in total_tasks:
+                    
+                    if i['slug'] == "miniapp_telegram_channel_follow":
+                        break
+                    
+                    if i['maxAccomplishCountPerUser'] is None or i['userAccomplishedCount'] < i['maxAccomplishCountPerUser']:
+                        if i['activityTypes'] is None and 'Invite' not in i['name']:
+                            task.finish_task(token, proxies, i['id'], i['name'])
+                        elif 'Invite' not in i['name']:
+                            task.check_task(token, proxies,i['activityTypes'][0], i['id'], i['name'])
 
 
 #running main function
