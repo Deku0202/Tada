@@ -14,7 +14,7 @@ import time
 
 from functions import mainfuns
 from functions import login
-# from functions import task
+from functions import task
 
 
 
@@ -65,35 +65,23 @@ class Hamster:
             #information
             token = login.token(data, proxies)
             
-
-            #choose
-            print(f"{green}Choose: {reset}", end='')
-            option = int(input())
+            #check total tasks
+            total_tasks = task.task_list(token, proxies)
             
-            #if statement for choosing option
-            if option == 1:
-                total_skin = 39
-    
-                #loop the buying skin
-                for i in range(total_skin):
-                                
-                    skin_buy.skin(data, proxies, i)
+            if total_tasks == None:
+                break
             
-            #check total task
-            if option == 2:
-                total_task = task.task_list(data, proxies)
+            #finish the tasks
+            for i in total_tasks:
                 
-                #Attempting and 2 seconds
-                mainfuns.log(f"{mainfuns.green}Attempting to complete Tasks.")
-                time.sleep(2)
+                if i['slug'] == "miniapp_telegram_channel_follow":
+                    break
                 
-                #take out only the Youtube and social meida tasks
-                for selected_task in total_task:
-                    if selected_task['isCompleted'] == False and ("invite_friends" not in selected_task['id']):
-                        
-                        task_id = selected_task['id']
-                        task.check_task(data, proxies, task_id)
-                        mainfuns.delay(5)
+                if i['maxAccomplishCountPerUser'] is None or i['userAccomplishedCount'] < i['maxAccomplishCountPerUser']:
+                    if i['activityTypes'] is None and 'Invite' not in i['name']:
+                        task.finish_task(token, proxies, i['id'], i['name'])
+                    elif 'Invite' not in i['name']:
+                        task.check_task(token, proxies,i['activityTypes'][0], i['id'], i['name'])
 
 
 #running main function
