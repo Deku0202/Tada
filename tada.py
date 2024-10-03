@@ -33,7 +33,9 @@ class Hamster:
         self.main_dir = os.path.dirname(os.path.realpath(__file__))
 
         # Get the directory of the data file
-        self.data_dir = os.path.join(self.main_dir, "data.json")
+        self.data_dir = os.path.join(self.main_dir, "functions/token.json")
+        
+        self.proxy_dir = os.path.join(self.main_dir, "data.json")
 
         # Get the directory of the config file
         self.config = os.path.join(self.main_dir, "config.json")
@@ -41,8 +43,14 @@ class Hamster:
     def main(self): 
         
         #load the accounts
-        accounts = json.load(open(self.data_dir, "r"))['accounts']
+        accounts = json.load(open(self.data_dir, "r"))
+        proxy = json.load(open(self.proxy_dir, "r"))['accounts']
         total_acc = len(accounts)
+        
+        proxy = proxy[0]['proxy_info']
+        #proxy with http and https format
+        proxies = mainfuns.format_proxy(proxy)
+                
         
         
         #choose option to do
@@ -55,6 +63,9 @@ class Hamster:
         
         #if statement for choosing option
         if option == 1:
+            
+            #check if there data already
+            mainfuns.token_chk()
                 
             while True:
                 #choose
@@ -62,50 +73,42 @@ class Hamster:
                 query = input()
                     
                 #information
-                token = login.token(data, proxies)
+                token = login.token(query, proxies)
                     
                 token_add.token_add(token)
         
+        elif option == 2:
         
-        #print the total account
-        mainfuns.log(f"{green}Total Account: {white}{total_acc}")
-        
-        #proxy check if valid or not 
-        for num, acc in enumerate(accounts):
-            mainfuns.log(f"{green}Account Number: {white}{num+1}")
-            data = acc['acc_info']
-            proxy = acc['proxy_info']
-            proxy_info = mainfuns.proxy(proxy)
-            if proxy_info is None:
-                break
+            #print the total account
+            mainfuns.log(f"{green}Total Account: {white}{total_acc}")
             
-            #proxy ip
-            proxy_ip = mainfuns.check_ip(proxy)
-            
-            #proxy with http and https format
-            proxies = mainfuns.format_proxy(proxy)
-            
-            
-            
-            
-                
-                
-                
-                
-            
-            if option == 2:
-                #check total tasks
-                total_tasks = task.task_list(token, proxies)
-                
-                if total_tasks == None:
+            #proxy check if valid or not 
+            for num, acc in enumerate(accounts):
+                mainfuns.log(f"{green}Account Number: {white}{num+1}")
+                data = acc['acc_info']
+                proxy = acc['proxy_info']
+                proxy_info = mainfuns.proxy(proxy)
+                if proxy_info is None:
                     break
                 
+                #proxy ip
+                proxy_ip = mainfuns.check_ip(proxy)
+                
+                #proxy with http and https format
+                proxies = mainfuns.format_proxy(proxy)
+                
+                #check total tasks
+                total_tasks = task.task_list(token, proxies)
+                    
+                if total_tasks == None:
+                    break
+                    
                 #finish the tasks
                 for i in total_tasks:
-                    
+                        
                     if i['slug'] == "miniapp_telegram_channel_follow":
                         break
-                    
+                        
                     if i['maxAccomplishCountPerUser'] is None or i['userAccomplishedCount'] < i['maxAccomplishCountPerUser']:
                         if i['activityTypes'] is None and 'Invite' not in i['name']:
                             task.finish_task(token, proxies, i['id'], i['name'])

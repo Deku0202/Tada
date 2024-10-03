@@ -74,3 +74,24 @@ def delay(seconds):
         seconds -= 1
 
     return
+
+#token check and delete
+def token_chk():
+    main_dir = os.path.dirname(os.path.realpath(__file__))
+
+    # Get the directory of the data file
+    data_dir = os.path.join(main_dir, "token.json")
+
+    
+    #load the accounts
+    existing_data = json.load(open(data_dir, "r"))
+    
+    if len(existing_data) > 0:
+        
+        existing_data.clear()
+        # Write the updated data back to the file
+        with open(data_dir, 'w') as json_file:
+            json.dump(existing_data, json_file, indent=4)
+        return
+    
+    return
