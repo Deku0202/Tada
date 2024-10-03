@@ -27,7 +27,7 @@ blue = Fore.LIGHTBLUE_EX
 white = Fore.LIGHTWHITE_EX
 reset = Style.RESET_ALL
 
-class Hamster:
+class Tada:
     def __init__(self):
         # Get the directory where the script is located
         self.main_dir = os.path.dirname(os.path.realpath(__file__))
@@ -35,7 +35,7 @@ class Hamster:
         # Get the directory of the data file
         self.data_dir = os.path.join(self.main_dir, "functions/token.json")
         
-        self.proxy_dir = os.path.join(self.main_dir, "data.json")
+        self.proxy_dir = os.path.join(self.main_dir, "proxy.json")
 
         # Get the directory of the config file
         self.config = os.path.join(self.main_dir, "config.json")
@@ -44,15 +44,17 @@ class Hamster:
         
         #load the accounts
         accounts = json.load(open(self.data_dir, "r"))
-        proxy = json.load(open(self.proxy_dir, "r"))['accounts']
+        proxy = json.load(open(self.proxy_dir, "r"))
         total_acc = len(accounts)
+        proxy_len = len(proxy)
         
-        proxy = proxy[0]['proxy_info']
+        random_num = random.randrange(0,proxy_len)
+        proxy = proxy[str(random_num)]
+        
+        # proxy = proxy[0]['proxy_info']
         #proxy with http and https format
         proxies = mainfuns.format_proxy(proxy)
                 
-        
-        
         #choose option to do
         mainfuns.log(f"{mainfuns.green}Add Data: {mainfuns.white}1")
         mainfuns.log(f"{mainfuns.green}Complete Tasks: {mainfuns.white}2")
@@ -85,8 +87,7 @@ class Hamster:
             #proxy check if valid or not 
             for num, acc in enumerate(accounts):
                 mainfuns.log(f"{green}Account Number: {white}{num+1}")
-                data = acc['acc_info']
-                proxy = acc['proxy_info']
+                data = accounts[acc]
                 proxy_info = mainfuns.proxy(proxy)
                 if proxy_info is None:
                     break
@@ -98,7 +99,7 @@ class Hamster:
                 proxies = mainfuns.format_proxy(proxy)
                 
                 #check total tasks
-                total_tasks = task.task_list(token, proxies)
+                total_tasks = task.task_list(data, proxies)
                     
                 if total_tasks == None:
                     break
@@ -109,11 +110,11 @@ class Hamster:
                     if i['slug'] == "miniapp_telegram_channel_follow":
                         break
                         
-                    if i['maxAccomplishCountPerUser'] is None or i['userAccomplishedCount'] < i['maxAccomplishCountPerUser']:
+                    if i['maxAccomplishCountPerUser'] is None or i['userClaimableAccomplishmentsCount'] > 0:
                         if i['activityTypes'] is None and 'Invite' not in i['name']:
-                            task.finish_task(token, proxies, i['id'], i['name'])
+                            task.finish_task(data, proxies, i['id'], i['name'])
                         elif 'Invite' not in i['name']:
-                            task.check_task(token, proxies,i['activityTypes'][0], i['id'], i['name'])
+                            task.check_task(data, proxies,i['activityTypes'][0], i['id'], i['name'])
 
 
 #running main function
