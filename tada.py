@@ -108,9 +108,9 @@ class Tada:
                 for i in total_tasks:
                         
                     if i['slug'] == "miniapp_telegram_channel_follow":
-                        break
+                        continue
                         
-                    if i['maxAccomplishCountPerUser'] is None or i['userClaimableAccomplishmentsCount'] > 0:
+                    if i['maxAccomplishCountPerUser'] is None or i['userClaimableAccomplishmentsCount'] > 0 or i['maxAccomplishCountPerUser'] > i['userAccomplishedCount']:
                         if i['activityTypes'] is None and 'Invite' not in i['name']:
                             task.finish_task(data, proxies, i['id'], i['name'])
                         elif 'Invite' not in i['name']:
@@ -120,7 +120,7 @@ class Tada:
 #running main function
 if __name__ == "__main__":
     try:
-        hamster = Hamster()
-        hamster.main()
+        tada= Tada()
+        tada.main()
     except KeyboardInterrupt:
         sys.exit()
