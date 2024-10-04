@@ -67,7 +67,7 @@ def finish_task(data, proxy, taskid, name):
         
         if len(result['missionPointTransactions']) == 1:
             mainfuns.log(f"{mainfuns.white}{name}: {mainfuns.green}Completed")
-            mainfuns.delay(5)
+            mainfuns.delay(2)
         
         return 
 
