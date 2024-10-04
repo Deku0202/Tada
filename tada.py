@@ -45,7 +45,7 @@ class Tada:
     def main(self): 
         
         #load the accounts
-        accounts = json.load(open(self.data_dir, "r"))
+        accounts = json.load(open(self.data_dir, "r"))['accounts']
         proxy = json.load(open(self.proxy_dir, "r"))
         total_acc = len(accounts)
         proxy_len = len(proxy)
@@ -92,7 +92,7 @@ class Tada:
             #proxy check if valid or not 
             for num, acc in enumerate(accounts):
                 mainfuns.log(f"{green}Account Number: {white}{num+1}")
-                data = accounts[acc]
+                data = acc['token']
                 proxy_info = mainfuns.proxy(proxy)
                 if proxy_info is None:
                     break
