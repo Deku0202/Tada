@@ -11,11 +11,13 @@ from datetime import datetime
 import random
 import json
 import time
+import readline
 
 from functions import mainfuns
 from functions import login
 from functions import task
 from functions import token_add
+from functions import query
 
 
 
@@ -72,10 +74,12 @@ class Tada:
             while True:
                 #choose
                 print(f"{green}Add Query ID: {reset}", end='')
-                query = input()
+                data = input()
+                
+                query_id = query.query_id(data)
                     
                 #information
-                token = login.token(query, proxies)
+                token = login.token(query_id, proxies)
                     
                 token_add.token_add(token)
         
