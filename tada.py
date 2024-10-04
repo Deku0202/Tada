@@ -102,9 +102,6 @@ class Tada:
                 #proxy with http and https format
                 proxies = mainfuns.format_proxy(proxy)
                 
-                #dailytask
-                task.open_bot(data, proxies)
-                
                 #check total tasks
                 total_tasks = task.task_list(data, proxies)
                     

@@ -75,6 +75,10 @@ def task_list(data, proxy):
 def finish_task(data, proxy, taskid, name):
     url =f'https://backend.clutchwalletserver.xyz/activity/v2/missions/{taskid}/claim'
     
+    if name == "Check in once a day.":
+        #dailytask
+        task.open_bot(data, proxies)
+    
     try:
         response = requests.post(
             url=url,
