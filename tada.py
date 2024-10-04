@@ -69,7 +69,7 @@ class Tada:
         if option == 1:
             
             #check if there data already
-            mainfuns.token_chk()
+            # mainfuns.token_chk()
                 
             while True:
                 #choose
@@ -79,9 +79,10 @@ class Tada:
                 query_id = query.query_id(data)
                     
                 #information
-                token = login.token(query_id, proxies)
+                token, refresh = login.token(query_id, proxies)
+
                     
-                token_add.token_add(token)
+                token_add.token_add(token, refresh)
         
         elif option == 2:
         
