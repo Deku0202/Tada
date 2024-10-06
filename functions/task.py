@@ -13,6 +13,28 @@ task_names = {
     'instagram': 'Follow on Instagram'
 }
 
+#open bot
+def open_bot(data, proxy):
+    url =f'https://backend.clutchwalletserver.xyz/activity/v3/activities/open_telegram_miniapp'
+    
+    try:
+        response = requests.post(
+            url=url,
+            headers=task_headers(data=data),
+            proxies=proxy,
+            timeout=20
+        )
+        
+        result = response.json()
+            
+        return 
+    
+        
+    except:
+        mainfuns.log(f"{mainfuns.red}Error connect to owner")
+        return None
+
+
 #check test name 
 def task_name(id):
     for task_name in task_names:
@@ -52,6 +74,10 @@ def task_list(data, proxy):
     
 def finish_task(data, proxy, taskid, name):
     url =f'https://backend.clutchwalletserver.xyz/activity/v2/missions/{taskid}/claim'
+    
+    if name == "Check in once a day.":
+        #dailytask
+        task.open_bot(data, proxies)
     
     try:
         response = requests.post(
