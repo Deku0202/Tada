@@ -77,7 +77,7 @@ def finish_task(data, proxy, taskid, name):
     
     if name == "Check in once a day.":
         #dailytask
-        task.open_bot(data, proxies)
+        open_bot(data, proxy)
     
     try:
         response = requests.post(
@@ -98,7 +98,7 @@ def finish_task(data, proxy, taskid, name):
         return 
 
     except:
-        mainfuns.log(f"{mainfuns.red}Error connect to owner")
+        mainfuns.log(f"{mainfuns.white}{name}: {mainfuns.red}Error could not complete")
         return None
     
 #check the task
