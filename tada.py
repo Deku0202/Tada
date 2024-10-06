@@ -93,6 +93,7 @@ class Tada:
             for num, acc in enumerate(accounts):
                 mainfuns.log(f"{green}Account Number: {white}{num+1}")
                 data = acc['token']
+                refresh = acc['refresh']
                 proxy_info = mainfuns.proxy(proxy)
                 if proxy_info is None:
                     break
@@ -102,6 +103,12 @@ class Tada:
                 
                 #proxy with http and https format
                 proxies = mainfuns.format_proxy(proxy)
+                
+                #check if jwt is expired or not 
+                exp = token_add.is_token_expired(data)
+                
+                if exp == True:
+                    data = token_add.token_refresh(refresh, proxies, num)
                 
                 #check total tasks
                 total_tasks = task.task_list(data, proxies)
