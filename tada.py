@@ -45,7 +45,7 @@ class Tada:
     def main(self): 
         
         #load the accounts
-        accounts = json.load(open(self.data_dir, "r"))
+        accounts = json.load(open(self.data_dir, "r"))['accounts']
         proxy = json.load(open(self.proxy_dir, "r"))
         total_acc = len(accounts)
         proxy_len = len(proxy)
@@ -69,7 +69,7 @@ class Tada:
         if option == 1:
             
             #check if there data already
-            mainfuns.token_chk()
+            # mainfuns.token_chk()
                 
             while True:
                 #choose
@@ -79,9 +79,10 @@ class Tada:
                 query_id = query.query_id(data)
                     
                 #information
-                token = login.token(query_id, proxies)
+                token, refresh = login.token(query_id, proxies)
+
                     
-                token_add.token_add(token)
+                token_add.token_add(token, refresh)
         
         elif option == 2:
         
@@ -91,7 +92,8 @@ class Tada:
             #proxy check if valid or not 
             for num, acc in enumerate(accounts):
                 mainfuns.log(f"{green}Account Number: {white}{num+1}")
-                data = accounts[acc]
+                data = acc['token']
+                refresh = acc['refresh']
                 proxy_info = mainfuns.proxy(proxy)
                 if proxy_info is None:
                     break
@@ -101,6 +103,12 @@ class Tada:
                 
                 #proxy with http and https format
                 proxies = mainfuns.format_proxy(proxy)
+                
+                #check if jwt is expired or not 
+                exp = token_add.is_token_expired(data)
+                
+                if exp == True:
+                    data = token_add.token_refresh(refresh, proxies, num)
                 
                 #check total tasks
                 total_tasks = task.task_list(data, proxies)
