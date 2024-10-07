@@ -72,7 +72,7 @@ def token_refresh(refresh, proxy, num):
         with open(data_dir, 'w') as json_file:
             json.dump(existing_data, json_file, indent=4)
         
-        return result['refreshToken']
+        return result['accessToken']
 
     except:
         mainfuns.log(f"{mainfuns.red}Error connect to owner")
