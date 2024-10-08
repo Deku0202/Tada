@@ -41,7 +41,7 @@ def is_token_expired(token):
     return current > exp_time
 
 #refresh the tokens
-def token_refresh(refresh, proxy, num):
+def token_refresh(refresh, proxy, num, count):
     
     url =f'https://backend.clutchwalletserver.xyz/v2/accounts/sessions/refresh'
     
@@ -75,6 +75,9 @@ def token_refresh(refresh, proxy, num):
         return result['accessToken']
 
     except:
+        if count == 0:
+            mainfuns.delay(3)
+            return None
         mainfuns.log(f"{mainfuns.red}Error connect to owner")
         return None
     
