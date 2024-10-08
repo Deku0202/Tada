@@ -108,8 +108,12 @@ class Tada:
                 exp = token_add.is_token_expired(data)
                 
                 if exp == True:
+                    count = 0
                     mainfuns.log(f"{green}Refreshing Token: {white}{num+1}")
-                    data = token_add.token_refresh(refresh, proxies, num)
+                    data = token_add.token_refresh(refresh, proxies, num, count)
+                    if data == None:
+                        count += 1
+                        data = token_add.token_refresh(refresh, proxies, num, count)
                     mainfuns.delay(3)
                 
                 #check total tasks
